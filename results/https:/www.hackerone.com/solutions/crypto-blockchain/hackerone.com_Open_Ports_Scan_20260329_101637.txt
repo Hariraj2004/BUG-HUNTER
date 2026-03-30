@@ -1,0 +1,6 @@
+=== Open Ports Scan ===
+usage: open_ports.py [-h] [-p PORTS] [-t THREADS] [-T TIMEOUT] [--no-fallback]
+                     target
+open_ports.py: error: unrecognized arguments: 10
+
+
