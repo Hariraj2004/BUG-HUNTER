@@ -8,3 +8,15 @@ pexpect==4.9.0
 gunicorn==21.2.0
 eventlet==0.36.1
 argus-recon==2.0.0
+# Argus dependencies (not all properly declared by the package)
+colorama==0.4.6
+tabulate
+beautifulsoup4==4.14.3
+dnspython==2.8.0
+lxml==5.4.0
+mmh3==4.1.0
+paramiko==3.5.1
+python-slugify==8.0.4
+requests==2.33.0
+rich==14.3.3
+aiohttp
