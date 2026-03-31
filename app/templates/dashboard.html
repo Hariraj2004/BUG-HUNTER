@@ -524,11 +524,55 @@
                 </div>`;
             } else if (isCompleted) {
                 const parsed = job.parsed_result || {};
+                const analysis = job.security_analysis || null;
                 const summary = parsed.summary || 'Scan complete.';
                 const lines = parsed.lines || [];
                 const detail = lines.length > 0
                     ? `<div class="result-panel mt-2 space-y-1">${lines.map(l => `<div class="text-[10px] px-2 py-1 rounded-md" style="background:var(--surface-4); font-family:'JetBrains Mono',monospace; color:var(--text-muted);">${l}</div>`).join('')}</div>`
                     : '';
+
+                let analysisHtml = '';
+                if (analysis && analysis.findings && analysis.findings.length > 0) {
+                    const sevBg = { 'CRITICAL': 'badge-danger', 'HIGH': 'badge-danger', 'MEDIUM': 'badge-warning', 'LOW': 'badge-accent', 'INFO': 'badge-muted' };
+                    
+                    const findingsHtml = analysis.findings.map(f => `
+                        <div class="mt-3 p-3 rounded-xl border border-white/5" style="background:rgba(255,255,255,0.02);">
+                            <div class="flex items-center justify-between mb-2">
+                                <h4 class="text-xs font-bold text-white">${f.title}</h4>
+                                <span class="badge ${sevBg[f.severity] || 'badge-muted'}">${f.severity}</span>
+                            </div>
+                            <p class="text-[10px] mb-3 leading-relaxed" style="color:var(--text-muted);">${f.description}</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <p class="text-[9px] font-bold text-rose-400 uppercase tracking-widest mb-1.5 flex items-center gap-1"><span class="material-symbols-outlined text-[10px]">warning</span> Risk Vectors</p>
+                                    <ul class="text-[10px] space-y-1 font-mono" style="color:var(--text-muted);">
+                                        ${f.attacks.map(a => `<li class="flex gap-1.5 items-start"><span class="text-rose-400/50 mt-0.5">•</span> <span class="flex-1">${a}</span></li>`).join('')}
+                                    </ul>
+                                </div>
+                                <div>
+                                    <p class="text-[9px] font-bold text-emerald-400 uppercase tracking-widest mb-1.5 flex items-center gap-1"><span class="material-symbols-outlined text-[10px]">check_circle</span> Remediation</p>
+                                    <ul class="text-[10px] space-y-1 font-mono" style="color:var(--text-muted);">
+                                        ${f.solutions.map(s => `<li class="flex gap-1.5 items-start"><span class="text-emerald-400/50 mt-0.5">•</span> <span class="flex-1">${s}</span></li>`).join('')}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('');
+
+                    analysisHtml = `
+                    <div class="mt-4 pt-4 border-t border-white/10">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-xs font-bold text-indigo-400 uppercase tracking-widest flex items-center gap-1.5">
+                                <span class="material-symbols-outlined text-sm">security</span> Security Analysis
+                            </h3>
+                            <span class="text-[9px] font-mono border rounded px-1.5 py-0.5" style="color:var(--text-muted); border-color:var(--border);">${analysis.summary || ''}</span>
+                        </div>
+                        <div class="space-y-2 mt-2">
+                            ${findingsHtml}
+                        </div>
+                    </div>`;
+                }
+
                 progress = `
                 <div class="mt-4">
                     <p class="text-[10px] text-emerald-400 font-semibold font-mono mb-2">${summary}</p>
@@ -536,6 +580,7 @@
                         <div class="h-full w-full rounded-full" style="background:rgba(16,185,129,0.5);"></div>
                     </div>
                     ${detail}
+                    ${analysisHtml}
                 </div>`;
             } else if (isFailed) {
                 progress = `

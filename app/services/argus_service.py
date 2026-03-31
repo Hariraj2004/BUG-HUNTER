@@ -6,6 +6,7 @@ import sys
 import subprocess
 import threading
 from typing import Dict, Any, List, Optional
+from .security_analyzer import SecurityAnalyzer
 
 
 ANSI_ESCAPE = re.compile(r'\x1b\[[0-9;]*[a-zA-Z]|\x1b\[\?[0-9;]*[a-zA-Z]|\r')
@@ -16,6 +17,7 @@ class ArgusService:
         self.jobs: Dict[str, Dict[str, Any]] = {}
         self.supported_modules: Dict[int, Dict[str, Any]] = {}
         self._modules_dir: Optional[str] = None
+        self._analyzer = SecurityAnalyzer()
         self._load_modules()
 
     def _load_modules(self):
@@ -82,6 +84,7 @@ class ArgusService:
             "finished_at": None,
             "output": "",
             "parsed_result": {},
+            "security_analysis": {},
             "error": None
         }
 
@@ -139,6 +142,10 @@ class ArgusService:
             clean_output = ANSI_ESCAPE.sub('', raw_output)
             job["output"] = clean_output
             job["parsed_result"] = self._parse_output(clean_output)
+            job["security_analysis"] = self._analyzer.analyze(
+                job["parsed_result"].get("lines", []),
+                job.get("module_name", "")
+            )
             job["status"] = "completed"
 
         except subprocess.TimeoutExpired:
