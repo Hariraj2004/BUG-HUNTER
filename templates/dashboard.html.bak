@@ -3,9 +3,9 @@
 <html class="dark" lang="en"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Bug Hunter | System Dashboard</title>
+<title>NEURAL_SYNTH | System Dashboard</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;600;700;800&amp;family=Share Tech Mono:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;600;700;800&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <style>
         .material-symbols-outlined {
@@ -24,8 +24,8 @@
             100% { background-position: 200% 0; }
         }
         @keyframes glow-pulse {
-            0%, 100% { filter: drop-shadow(0 0 2px rgba(0, 255, 65, 0.4)); }
-            50% { filter: drop-shadow(0 0 12px rgba(0, 255, 65, 0.8)); }
+            0%, 100% { filter: drop-shadow(0 0 2px rgba(219, 144, 255, 0.4)); }
+            50% { filter: drop-shadow(0 0 12px rgba(219, 144, 255, 0.8)); }
         }
         @keyframes bg-drift {
             0%, 100% { transform: translate(0, 0) scale(1); }
@@ -51,7 +51,7 @@
             border: 1px solid rgba(255, 255, 255, 0.08);
         }
         .flow-line {
-            background: linear-gradient(90deg, transparent 0%, #00ff41 50%, transparent 100%);
+            background: linear-gradient(90deg, transparent 0%, #db90ff 50%, transparent 100%);
             background-size: 200% 100%;
             animation: data-flow 3s linear infinite;
         }
@@ -62,15 +62,13 @@
             animation: spin-slow 4s linear infinite;
         }
         body {
-            background-color: #050505;
+            background-color: #0c0e12;
             color: #f6f6fc;
-            font-family: 'Share Tech Mono', monospace, sans-serif;
+            font-family: 'Inter', sans-serif;
             overflow-x: hidden;
         }
-        h1, h2, h3, .font-rajdhani {
-            font-family: 'Rajdhani', sans-serif;
-        }
-            font-family: 'Rajdhani', sans-serif, sans-serif;
+        h1, h2, h3, .font-lexend {
+            font-family: 'Lexend', sans-serif;
         }
         .card-interaction {
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -78,10 +76,10 @@
         .card-interaction:active {
             transform: scale(0.97) !important;
         }
-        #scan-target:focus { box-shadow: 0 0 20px rgba(0,255,65,0.15); }
+        #scan-target:focus { box-shadow: 0 0 20px rgba(219,144,255,0.15); }
         .result-panel { max-height: 300px; overflow-y: auto; }
         .result-panel::-webkit-scrollbar { width: 4px; }
-        .result-panel::-webkit-scrollbar-thumb { background: rgba(0,255,65,0.3); border-radius: 4px; }
+        .result-panel::-webkit-scrollbar-thumb { background: rgba(219,144,255,0.3); border-radius: 4px; }
     </style>
 <script id="tailwind-config">
         tailwind.config = {
@@ -97,15 +95,15 @@
                 "on-error-container": "#ffb2b9",
                 "on-tertiary": "#0e0078",
                 "inverse-surface": "#f9f9ff",
-                "background": "#050505",
+                "background": "#0c0e12",
                 "on-primary-container": "#3c0057",
                 "on-secondary": "#49000f",
-                "primary-fixed": "#00ff41",
-                "secondary": "#00e5ff",
-                "surface-tint": "#00ff41",
+                "primary-fixed": "#d37bff",
+                "secondary": "#ff6f7c",
+                "surface-tint": "#db90ff",
                 "on-background": "#f6f6fc",
                 "surface-container": "#171a1f",
-                "primary": "#00ff41",
+                "primary": "#db90ff",
                 "secondary-container": "#be0036",
                 "on-surface": "#f6f6fc",
                 "surface-container-low": "#111318",
@@ -115,7 +113,7 @@
                 "surface-container-lowest": "#000000",
                 "tertiary-fixed-dim": "#9999ff",
                 "on-primary-fixed": "#000000",
-                "primary-container": "#00ff41",
+                "primary-container": "#d37bff",
                 "error": "#ff6e84",
                 "on-primary": "#4e0070",
                 "error-container": "#a70138",
@@ -129,7 +127,7 @@
                 "primary-fixed-dim": "#cb66fe",
                 "error-dim": "#d73357",
                 "on-secondary-fixed": "#6f001b",
-                "surface-dim": "#050505",
+                "surface-dim": "#0c0e12",
                 "on-tertiary-fixed": "#090060",
                 "surface-container-highest": "#23262c",
                 "secondary-dim": "#e51245",
@@ -138,13 +136,13 @@
                 "secondary-fixed": "#ffc3c4",
                 "secondary-fixed-dim": "#ffaeb2",
                 "inverse-primary": "#9027c4",
-                "surface": "#050505",
+                "surface": "#0c0e12",
                 "on-tertiary-container": "#000000"
               },
               fontFamily: {
-                "headline": ["Rajdhani"],
-                "body": ["Share Tech Mono"],
-                "label": ["Share Tech Mono"]
+                "headline": ["Lexend"],
+                "body": ["Inter"],
+                "label": ["Inter"]
               },
               borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
             },
@@ -163,12 +161,12 @@
 <!-- Top Bar -->
 <header class="fixed top-0 w-full z-50 bg-slate-950/60 backdrop-blur-2xl flex justify-between items-center px-6 py-4 border-b border-white/5 shadow-2xl">
 <div class="flex items-center gap-3">
-<span class="material-symbols-outlined text-green-500 text-3xl animate-pulse-slow" data-icon="bubble_chart">bubble_chart</span>
-<h1 class="text-2xl font-bold tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-500 font-rajdhani">Bug Hunter</h1>
+<span class="material-symbols-outlined text-purple-400 text-3xl animate-pulse-slow" data-icon="bubble_chart">bubble_chart</span>
+<h1 class="text-2xl font-bold tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-fuchsia-500 font-lexend">NEURAL_SYNTH</h1>
 </div>
 <div class="relative group cursor-pointer">
 <span class="material-symbols-outlined text-slate-400 text-2xl group-hover:text-primary transition-colors p-2 rounded-full" data-icon="notifications">notifications</span>
-<span class="absolute top-2 right-2 w-2 h-2 bg-secondary rounded-full shadow-[0_0_12px_#00e5ff] animate-pulse"></span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-secondary rounded-full shadow-[0_0_12px_#ff6f7c] animate-pulse"></span>
 </div>
 </header>
 <main id="main-content" class="pt-24 px-6 space-y-10">
@@ -178,7 +176,7 @@
 <!-- Architecture Section: Bioluminescent Flow -->
 <section class="relative group">
 <div class="flex justify-between items-center mb-6">
-<h2 class="text-xs uppercase tracking-[0.2em] text-green-500/70 font-rajdhani font-bold">Architecture Flow</h2>
+<h2 class="text-xs uppercase tracking-[0.2em] text-purple-400/70 font-lexend font-bold">Architecture Flow</h2>
 <span class="text-[10px] text-on-surface-variant font-mono bg-surface-container px-2 py-1 rounded-md">ENCRYPTED_LINK_042</span>
 </div>
 <div class="relative h-72 glass-panel rounded-[2.5rem] p-8 overflow-hidden animate-float card-interaction">
@@ -191,13 +189,13 @@
 <div class="w-14 h-14 rounded-2xl bg-surface-container-high flex items-center justify-center text-primary border border-primary/20 shadow-xl group-hover/node:scale-110 group-hover/node:border-primary/50 transition-all duration-500">
 <span class="material-symbols-outlined text-2xl" data-icon="login">login</span>
 </div>
-<span class="text-[9px] font-rajdhani font-bold tracking-[0.2em] text-on-surface-variant uppercase">Ingress</span>
+<span class="text-[9px] font-lexend font-bold tracking-[0.2em] text-on-surface-variant uppercase">Ingress</span>
 </div>
 <div class="flex flex-col items-center gap-3 group/node">
-<div class="w-16 h-16 rounded-full bg-primary/10 border border-primary/40 flex items-center justify-center text-primary shadow-[0_0_40px_rgba(0,255,65,0.25)] animate-pulse-slow group-hover/node:scale-110 transition-transform">
+<div class="w-16 h-16 rounded-full bg-primary/10 border border-primary/40 flex items-center justify-center text-primary shadow-[0_0_40px_rgba(219,144,255,0.25)] animate-pulse-slow group-hover/node:scale-110 transition-transform">
 <span class="material-symbols-outlined text-3xl" data-icon="settings_input_component">settings_input_component</span>
 </div>
-<span class="text-[9px] font-rajdhani font-bold tracking-[0.2em] text-primary uppercase">Kernel</span>
+<span class="text-[9px] font-lexend font-bold tracking-[0.2em] text-primary uppercase">Kernel</span>
 </div>
 </div>
 <!-- Flow Lines -->
@@ -211,13 +209,13 @@
 <div class="w-14 h-14 rounded-2xl bg-surface-container-high flex items-center justify-center text-tertiary border border-tertiary/20 shadow-xl group-hover/node:scale-110 group-hover/node:border-tertiary/50 transition-all duration-500">
 <span class="material-symbols-outlined" data-icon="database">database</span>
 </div>
-<span class="text-[9px] font-rajdhani font-bold tracking-[0.2em] text-on-surface-variant uppercase">DB_Cluster</span>
+<span class="text-[9px] font-lexend font-bold tracking-[0.2em] text-on-surface-variant uppercase">DB_Cluster</span>
 </div>
 <div class="flex flex-col items-center gap-3 group/node">
 <div class="w-14 h-14 rounded-2xl bg-surface-container-high flex items-center justify-center text-secondary border border-secondary/20 shadow-xl group-hover/node:scale-110 group-hover/node:border-secondary/50 transition-all duration-500">
 <span class="material-symbols-outlined" data-icon="security">security</span>
 </div>
-<span class="text-[9px] font-rajdhani font-bold tracking-[0.2em] text-on-surface-variant uppercase">Firewall</span>
+<span class="text-[9px] font-lexend font-bold tracking-[0.2em] text-on-surface-variant uppercase">Firewall</span>
 </div>
 </div>
 </div>
@@ -226,15 +224,15 @@
 
 <!-- Scan Launch Console -->
 <section class="space-y-4">
-<h2 class="text-xs uppercase tracking-[0.2em] text-green-500/70 font-rajdhani font-bold px-1">Launch Scan</h2>
+<h2 class="text-xs uppercase tracking-[0.2em] text-purple-400/70 font-lexend font-bold px-1">Launch Scan</h2>
 <div class="glass-panel rounded-[2rem] p-6 space-y-4">
     <div class="flex flex-col gap-3">
         <input id="scan-target" type="text" placeholder="Paste target domain or URL (e.g. scanme.nmap.org)" class="w-full bg-transparent border border-white/10 rounded-xl px-4 py-3.5 text-sm font-mono text-on-surface placeholder:text-on-surface-variant/50 focus:outline-none focus:border-primary/60 transition-colors" />
         <div class="flex gap-3">
-            <select id="scan-type" class="flex-1 bg-surface-container border border-white/10 rounded-xl px-4 py-3 text-xs font-rajdhani text-on-surface focus:outline-none focus:border-primary/60 transition-colors appearance-none cursor-pointer">
+            <select id="scan-type" class="flex-1 bg-surface-container border border-white/10 rounded-xl px-4 py-3 text-xs font-lexend text-on-surface focus:outline-none focus:border-primary/60 transition-colors appearance-none cursor-pointer">
                 <option value="" disabled selected>Loading modules...</option>
             </select>
-            <button id="launch-btn" onclick="launchScan()" class="bg-gradient-to-r from-primary/20 to-emerald-500/20 hover:from-primary/30 hover:to-emerald-500/30 border border-primary/30 active:scale-95 transition-all px-8 py-3 rounded-xl font-rajdhani font-bold text-xs text-primary tracking-[0.15em] uppercase flex items-center gap-2 shadow-[0_0_20px_rgba(0,255,65,0.1)]">
+            <button id="launch-btn" onclick="launchScan()" class="bg-gradient-to-r from-primary/20 to-fuchsia-500/20 hover:from-primary/30 hover:to-fuchsia-500/30 border border-primary/30 active:scale-95 transition-all px-8 py-3 rounded-xl font-lexend font-bold text-xs text-primary tracking-[0.15em] uppercase flex items-center gap-2 shadow-[0_0_20px_rgba(219,144,255,0.1)]">
                 <span class="material-symbols-outlined text-base">rocket_launch</span>
                 LAUNCH
             </button>
@@ -246,7 +244,7 @@
 <!-- Active Modules (Argus Jobs) -->
 <section class="space-y-4">
 <div class="flex justify-between items-center px-1">
-    <h2 class="text-xs uppercase tracking-[0.2em] text-green-500/70 font-rajdhani font-bold">Active Modules</h2>
+    <h2 class="text-xs uppercase tracking-[0.2em] text-purple-400/70 font-lexend font-bold">Active Modules</h2>
     <span id="job-count" class="text-[10px] text-on-surface-variant font-mono bg-surface-container px-2 py-1 rounded-md">0 JOBS</span>
 </div>
 <div id="active-modules-container" class="grid grid-cols-1 gap-5">
@@ -262,20 +260,20 @@
 <div class="bg-gradient-to-br from-secondary-container/30 to-surface-container-highest/60 backdrop-blur-3xl rounded-[2.5rem] p-8 relative overflow-hidden shadow-[0_20px_60px_rgba(190,0,54,0.2)] border border-secondary/30 card-interaction">
 <div class="absolute -top-12 -right-12 w-48 h-48 bg-secondary/10 blur-[60px] rounded-full animate-pulse-slow"></div>
 <div class="flex items-center gap-6 relative z-10">
-<div class="w-16 h-16 rounded-2xl bg-secondary/20 flex items-center justify-center text-secondary border border-secondary/30 shadow-[0_0_30px_rgba(0,229,255,0.2)]">
+<div class="w-16 h-16 rounded-2xl bg-secondary/20 flex items-center justify-center text-secondary border border-secondary/30 shadow-[0_0_30px_rgba(255,111,124,0.2)]">
 <span class="material-symbols-outlined text-4xl animate-bounce" data-icon="report_problem" style="animation-duration: 2s;">report_problem</span>
 </div>
 <div class="flex-1">
-<span class="text-[10px] font-rajdhani font-extrabold text-secondary tracking-[0.25em] uppercase px-2 py-0.5 bg-secondary/10 rounded">Critical Alert</span>
-<h3 class="font-rajdhani text-xl font-extrabold leading-tight mt-2 text-white">OPEN PORT SCANNING</h3>
+<span class="text-[10px] font-lexend font-extrabold text-secondary tracking-[0.25em] uppercase px-2 py-0.5 bg-secondary/10 rounded">Critical Alert</span>
+<h3 class="font-lexend text-xl font-extrabold leading-tight mt-2 text-white">OPEN PORT SCANNING</h3>
 <p class="text-xs text-on-surface-variant mt-1.5 font-medium">Unauthorized ingress attempt detected on Vector-9 Cluster.</p>
 </div>
 </div>
 <div class="mt-8 flex gap-4 relative z-10">
-<button class="flex-1 bg-secondary text-on-secondary font-rajdhani font-bold text-xs py-4 rounded-2xl uppercase tracking-[0.2em] shadow-lg shadow-secondary/20 active:scale-95 transition-all duration-300 hover:brightness-110">
+<button class="flex-1 bg-secondary text-on-secondary font-lexend font-bold text-xs py-4 rounded-2xl uppercase tracking-[0.2em] shadow-lg shadow-secondary/20 active:scale-95 transition-all duration-300 hover:brightness-110">
                         QUARANTINE
                     </button>
-<button class="px-6 bg-surface-container-highest text-on-surface font-rajdhani font-bold text-xs py-4 rounded-2xl uppercase tracking-[0.2em] border border-white/10 active:scale-95 transition-all duration-300 hover:bg-white/5">
+<button class="px-6 bg-surface-container-highest text-on-surface font-lexend font-bold text-xs py-4 rounded-2xl uppercase tracking-[0.2em] border border-white/10 active:scale-95 transition-all duration-300 hover:bg-white/5">
                         IGNORE
                     </button>
 </div>
@@ -284,9 +282,9 @@
 <!-- System Stats Grid -->
 <section class="grid grid-cols-2 gap-5">
 <div class="glass-panel rounded-[2rem] p-6 flex flex-col justify-between h-36 card-interaction">
-<span class="text-[9px] text-on-surface-variant font-rajdhani font-bold tracking-[0.2em] uppercase">Total Scans</span>
+<span class="text-[9px] text-on-surface-variant font-lexend font-bold tracking-[0.2em] uppercase">Total Scans</span>
 <div>
-<span id="stat-scans" class="text-4xl font-rajdhani font-bold text-primary tracking-tighter">0</span>
+<span id="stat-scans" class="text-4xl font-lexend font-bold text-primary tracking-tighter">0</span>
 <div class="flex items-center gap-1 mt-1">
 <span class="material-symbols-outlined text-[10px] text-primary" data-icon="trending_up">trending_up</span>
 <span class="text-[10px] text-primary/80 font-mono font-bold">Active</span>
@@ -294,9 +292,9 @@
 </div>
 </div>
 <div class="glass-panel rounded-[2rem] p-6 flex flex-col justify-between h-36 card-interaction">
-<span class="text-[9px] text-on-surface-variant font-rajdhani font-bold tracking-[0.2em] uppercase">Registered Nodes</span>
+<span class="text-[9px] text-on-surface-variant font-lexend font-bold tracking-[0.2em] uppercase">Registered Nodes</span>
 <div>
-<span id="stat-nodes" class="text-4xl font-rajdhani font-bold text-secondary tracking-tighter">0</span>
+<span id="stat-nodes" class="text-4xl font-lexend font-bold text-secondary tracking-tighter">0</span>
 <div class="flex items-center gap-1 mt-1">
 <span class="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse"></span>
 <span class="text-[10px] text-secondary/80 font-mono font-bold tracking-widest uppercase">Online</span>
@@ -308,7 +306,7 @@
 
 <!-- VIEW: NODES (Users) -->
 <div id="view-nodes" class="view-section hidden space-y-6">
-    <h2 class="text-xs uppercase tracking-[0.2em] text-green-500/70 font-rajdhani font-bold px-1">Registered Nodes</h2>
+    <h2 class="text-xs uppercase tracking-[0.2em] text-purple-400/70 font-lexend font-bold px-1">Registered Nodes</h2>
     <div id="nodes-container" class="space-y-4">
         <div class="text-center text-xs text-on-surface-variant py-8 font-mono">FETCHING NODES...</div>
     </div>
@@ -316,7 +314,7 @@
 
 <!-- VIEW: SYNAPSE (Logins) -->
 <div id="view-synapse" class="view-section hidden space-y-6">
-    <h2 class="text-xs uppercase tracking-[0.2em] text-green-500/70 font-rajdhani font-bold px-1">Synapse Activity</h2>
+    <h2 class="text-xs uppercase tracking-[0.2em] text-purple-400/70 font-lexend font-bold px-1">Synapse Activity</h2>
     <div id="synapse-container" class="space-y-4">
         <div class="text-center text-xs text-on-surface-variant py-8 font-mono">FETCHING SYNAPSE LOGS...</div>
     </div>
@@ -330,7 +328,7 @@
 <div class="absolute inset-0 bg-primary/15 rounded-2xl blur-md animate-pulse hidden nav-bg"></div>
 <div class="relative flex flex-col items-center justify-center group-hover:scale-110 transition-transform z-10">
 <span class="material-symbols-outlined mb-1 nav-icon group-hover:-translate-y-1 transition-transform" data-icon="hub">hub</span>
-<span class="font-rajdhani text-[8px] uppercase tracking-[0.2em] font-bold">Nodes</span>
+<span class="font-lexend text-[8px] uppercase tracking-[0.2em] font-bold">Nodes</span>
 </div>
 </div>
 <!-- Synapse -->
@@ -338,7 +336,7 @@
 <div class="absolute inset-0 bg-primary/15 rounded-2xl blur-md animate-pulse hidden nav-bg"></div>
 <div class="relative flex flex-col items-center justify-center group-hover:scale-110 transition-transform z-10">
 <span class="material-symbols-outlined mb-1 nav-icon group-hover:-translate-y-1 transition-transform" data-icon="psychology">psychology</span>
-<span class="font-rajdhani text-[8px] uppercase tracking-[0.2em] font-bold">Synapse</span>
+<span class="font-lexend text-[8px] uppercase tracking-[0.2em] font-bold">Synapse</span>
 </div>
 </div>
 <!-- Pulse (Active) -->
@@ -346,7 +344,7 @@
 <div class="absolute inset-0 bg-primary/15 rounded-2xl blur-md animate-pulse nav-bg"></div>
 <div class="relative flex flex-col items-center justify-center group-hover:scale-110 transition-transform z-10">
 <span class="material-symbols-outlined mb-1 status-glow nav-icon" data-icon="sensors">sensors</span>
-<span class="font-rajdhani text-[8px] uppercase tracking-[0.2em] font-extrabold">Pulse</span>
+<span class="font-lexend text-[8px] uppercase tracking-[0.2em] font-extrabold">Pulse</span>
 </div>
 </div>
 <!-- Core -->
@@ -354,14 +352,14 @@
 <div class="absolute inset-0 bg-primary/15 rounded-2xl blur-md animate-pulse hidden nav-bg"></div>
 <div class="relative flex flex-col items-center justify-center group-hover:scale-110 transition-transform z-10">
 <span class="material-symbols-outlined mb-1 nav-icon group-hover:-translate-y-1 transition-transform" data-icon="account_tree">account_tree</span>
-<span class="font-rajdhani text-[8px] uppercase tracking-[0.2em] font-bold">Core</span>
+<span class="font-lexend text-[8px] uppercase tracking-[0.2em] font-bold">Core</span>
 </div>
 </div>
 </nav>
 
 <script>
-    const API_URL = "https://bounty-dragon-hunter.onrender.com/api";
-    const ARGUS_URL = "https://bounty-dragon-hunter.onrender.com/api/argus";
+    const API_URL = "http://127.0.0.1:5000/api";
+    const ARGUS_URL = "http://127.0.0.1:5000/api/argus";
     let jwtToken = null;
 
     const sectionMeta = {
@@ -412,7 +410,7 @@
                 await fetchLogins();
                 await refreshArgusJobs();
 
-                const socket = io("https://bounty-dragon-hunter.onrender.com");
+                const socket = io("http://127.0.0.1:5000");
                 socket.on('scan_update', () => refreshArgusJobs());
             } else {
                 document.getElementById('active-modules-container').innerHTML = `<div class="text-secondary text-xs text-center py-8 font-mono">AUTH FAILURE</div>`;
@@ -457,7 +455,7 @@
             const statusColor = isRunning ? meta.colorClass : (isFailed ? 'text-red-400' : 'text-on-surface-variant');
             const statusText = job.status.toUpperCase();
             const statusGlow = isRunning ? 'status-glow' : '';
-            const pulseMarkup = isRunning ? `<span class="w-1.5 h-1.5 rounded-full ${meta.bgClass} animate-pulse shadow-[0_0_8px_#00ff41]"></span>` : '';
+            const pulseMarkup = isRunning ? `<span class="w-1.5 h-1.5 rounded-full ${meta.bgClass} animate-pulse shadow-[0_0_8px_#db90ff]"></span>` : '';
 
             let progMarkup = '';
             if (isRunning) {
@@ -468,7 +466,7 @@
                         <span class="animate-pulse">ACTIVE</span>
                     </div>
                     <div class="h-2 w-full bg-surface-container rounded-full overflow-hidden">
-                        <div class="h-full bg-gradient-to-r from-green-500 via-emerald-500 to-green-500 bg-[length:200%_100%] flow-line w-[80%] rounded-full"></div>
+                        <div class="h-full bg-gradient-to-r from-purple-500 via-fuchsia-500 to-purple-500 bg-[length:200%_100%] flow-line w-[80%] rounded-full"></div>
                     </div>
                 </div>`;
             } else if (isCompleted) {
@@ -510,11 +508,11 @@
                 </div>
                 <div class="flex flex-col">
                     <div class="flex items-center gap-4 ${!isRunning ? 'opacity-70' : ''}">
-                        <div class="w-12 h-12 rounded-2xl ${meta.bgClass}/10 flex items-center justify-center ${meta.colorClass} ${isRunning ? 'shadow-[inset_0_0_10px_rgba(0,255,65,0.2)]' : ''}">
+                        <div class="w-12 h-12 rounded-2xl ${meta.bgClass}/10 flex items-center justify-center ${meta.colorClass} ${isRunning ? 'shadow-[inset_0_0_10px_rgba(219,144,255,0.2)]' : ''}">
                             <span class="material-symbols-outlined text-2xl">${meta.icon}</span>
                         </div>
                         <div>
-                            <h3 class="font-rajdhani text-sm font-bold tracking-tight">${label}</h3>
+                            <h3 class="font-lexend text-sm font-bold tracking-tight">${label}</h3>
                             <div class="flex items-center gap-2 mt-0.5">
                                 ${pulseMarkup}
                                 <p class="text-[9px] ${statusColor} font-bold tracking-widest uppercase ${statusGlow}">Status: ${statusText}</p>
@@ -605,15 +603,15 @@
                 container.innerHTML = users.map(u => `
                     <div class="glass-panel rounded-2xl p-4 flex items-center justify-between card-interaction">
                         <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary border border-primary/20 shadow-[0_0_15px_rgba(0,255,65,0.1)]">
+                            <div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary border border-primary/20 shadow-[0_0_15px_rgba(219,144,255,0.1)]">
                                 <span class="material-symbols-outlined text-xl">person</span>
                             </div>
                             <div>
-                                <h3 class="font-rajdhani text-sm font-bold text-white">${u.username}</h3>
+                                <h3 class="font-lexend text-sm font-bold text-white">${u.username}</h3>
                                 <p class="text-[10px] text-on-surface-variant uppercase tracking-widest font-bold">ID: ${u.id}</p>
                             </div>
                         </div>
-                        <span class="px-3 py-1 rounded bg-surface-container text-[9px] font-rajdhani font-bold text-primary uppercase tracking-widest border border-primary/20">${u.role}</span>
+                        <span class="px-3 py-1 rounded bg-surface-container text-[9px] font-lexend font-bold text-primary uppercase tracking-widest border border-primary/20">${u.role}</span>
                     </div>
                 `).join('');
             }
@@ -633,7 +631,7 @@
                 container.innerHTML = events.map(e => `
                     <div class="glass-panel rounded-2xl p-4 flex flex-col gap-2 card-interaction">
                         <div class="flex justify-between items-center">
-                            <span class="text-xs font-rajdhani font-bold text-tertiary uppercase tracking-widest">${e.username || 'UNKNOWN'}</span>
+                            <span class="text-xs font-lexend font-bold text-tertiary uppercase tracking-widest">${e.username || 'UNKNOWN'}</span>
                             <span class="text-[9px] font-mono text-on-surface-variant">${new Date(e.timestamp).toLocaleString()}</span>
                         </div>
                         <div class="text-[10px] font-mono text-on-surface-variant flex flex-col gap-1">

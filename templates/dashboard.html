@@ -1,371 +1,422 @@
 <!DOCTYPE html>
-
-<html class="dark" lang="en"><head>
+<html class="dark" lang="en">
+<head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>NEURAL_SYNTH | System Dashboard</title>
+<title>Bug Hunter | Security Operations</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;600;700;800&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <style>
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-        }
-        @keyframes pulse-slow {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.7; transform: scale(0.98); }
-        }
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
-        }
-        @keyframes data-flow {
-            0% { background-position: -200% 0; }
-            100% { background-position: 200% 0; }
-        }
-        @keyframes glow-pulse {
-            0%, 100% { filter: drop-shadow(0 0 2px rgba(219, 144, 255, 0.4)); }
-            50% { filter: drop-shadow(0 0 12px rgba(219, 144, 255, 0.8)); }
-        }
-        @keyframes bg-drift {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            33% { transform: translate(5%, 5%) scale(1.1); }
-            66% { transform: translate(-5%, 2%) scale(0.9); }
-        }
-        @keyframes spin-slow {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-        .animate-pulse-slow {
-            animation: pulse-slow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-        }
-        .animate-float {
-            animation: float 6s ease-in-out infinite;
-        }
-        .animate-float-delayed {
-            animation: float 6s ease-in-out infinite -3s;
-        }
-        .glass-panel {
-            backdrop-filter: blur(24px);
-            background: rgba(29, 32, 37, 0.45);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-        }
-        .flow-line {
-            background: linear-gradient(90deg, transparent 0%, #db90ff 50%, transparent 100%);
-            background-size: 200% 100%;
-            animation: data-flow 3s linear infinite;
-        }
-        .status-glow {
-            animation: glow-pulse 2s infinite;
-        }
-        .animate-spin-slow {
-            animation: spin-slow 4s linear infinite;
-        }
-        body {
-            background-color: #0c0e12;
-            color: #f6f6fc;
-            font-family: 'Inter', sans-serif;
-            overflow-x: hidden;
-        }
-        h1, h2, h3, .font-lexend {
-            font-family: 'Lexend', sans-serif;
-        }
-        .card-interaction {
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        .card-interaction:active {
-            transform: scale(0.97) !important;
-        }
-        #scan-target:focus { box-shadow: 0 0 20px rgba(219,144,255,0.15); }
-        .result-panel { max-height: 300px; overflow-y: auto; }
-        .result-panel::-webkit-scrollbar { width: 4px; }
-        .result-panel::-webkit-scrollbar-thumb { background: rgba(219,144,255,0.3); border-radius: 4px; }
-    </style>
+    :root {
+        --accent: #6366f1;
+        --accent-dim: #4f52d9;
+        --accent-glow: rgba(99, 102, 241, 0.35);
+        --danger: #f43f5e;
+        --success: #10b981;
+        --warning: #f59e0b;
+        --surface: #0c0e1a;
+        --surface-2: #111320;
+        --surface-3: #181b2e;
+        --surface-4: #1e2135;
+        --border: rgba(255,255,255,0.06);
+        --text: #e2e4f0;
+        --text-muted: #8b90b0;
+    }
+    * { box-sizing: border-box; }
+    .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    body {
+        background-color: var(--surface);
+        color: var(--text);
+        font-family: 'Inter', system-ui, sans-serif;
+        overflow-x: hidden;
+    }
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--surface-2); }
+    ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 4px; }
+
+    /* Animations */
+    @keyframes fadeSlideIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pulse-ring {
+        0%, 100% { box-shadow: 0 0 0 0 var(--accent-glow); }
+        50%       { box-shadow: 0 0 0 6px transparent; }
+    }
+    @keyframes shimmer {
+        0%   { background-position: -200% 0; }
+        100% { background-position: 200% 0; }
+    }
+    @keyframes spin-slow {
+        from { transform: rotate(0deg); }
+        to   { transform: rotate(360deg); }
+    }
+    @keyframes status-blink {
+        0%, 100% { opacity: 1; }
+        50%       { opacity: 0.3; }
+    }
+
+    .animate-spin-slow  { animation: spin-slow 3s linear infinite; }
+    .animate-fade-in    { animation: fadeSlideIn 0.4s ease both; }
+    .animate-status     { animation: status-blink 2s ease-in-out infinite; }
+
+    /* Glass card */
+    .glass {
+        background: var(--surface-3);
+        border: 1px solid var(--border);
+        backdrop-filter: blur(20px);
+    }
+    .card {
+        background: var(--surface-3);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
+    }
+    .card:hover {
+        border-color: rgba(99,102,241,0.25);
+        box-shadow: 0 4px 30px rgba(99,102,241,0.08);
+        transform: translateY(-1px);
+    }
+    .card:active { transform: scale(0.99); }
+
+    /* Accent badge */
+    .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        padding: 2px 8px;
+        border-radius: 6px;
+    }
+    .badge-accent  { background: rgba(99,102,241,0.15); color: #a5b4fc; border: 1px solid rgba(99,102,241,0.25); }
+    .badge-success { background: rgba(16,185,129,0.12); color: #6ee7b7; border: 1px solid rgba(16,185,129,0.2); }
+    .badge-danger  { background: rgba(244,63,94,0.12);  color: #fda4af; border: 1px solid rgba(244,63,94,0.2); }
+    .badge-warning { background: rgba(245,158,11,0.12); color: #fcd34d; border: 1px solid rgba(245,158,11,0.2); }
+    .badge-muted   { background: rgba(255,255,255,0.05); color: var(--text-muted); border: 1px solid var(--border); }
+
+    /* Progress bar shimmer */
+    .progress-shimmer {
+        background: linear-gradient(90deg, var(--accent-dim) 0%, #818cf8 50%, var(--accent-dim) 100%);
+        background-size: 200% 100%;
+        animation: shimmer 2s linear infinite;
+    }
+
+    /* Inputs */
+    input, select {
+        background: var(--surface-2) !important;
+        color: var(--text) !important;
+        border: 1px solid var(--border) !important;
+        border-radius: 10px;
+        padding: 10px 14px;
+        font-size: 13px;
+        font-family: inherit;
+        outline: none;
+        transition: border-color 0.2s, box-shadow 0.2s;
+        width: 100%;
+        -webkit-appearance: none;
+        appearance: none;
+    }
+    select option, select optgroup {
+        background: var(--surface-2) !important;
+        color: var(--text) !important;
+    }
+    input::placeholder { color: var(--text-muted); }
+    input:focus, select:focus {
+        border-color: var(--accent) !important;
+        box-shadow: 0 0 0 3px rgba(99,102,241,0.15);
+    }
+    select option { background: var(--surface-2); }
+
+    /* Nav active glow */
+    .nav-active {
+        color: #a5b4fc !important;
+    }
+    .nav-active .nav-pill {
+        background: rgba(99,102,241,0.15);
+        border-color: rgba(99,102,241,0.3);
+    }
+
+    /* Divider line */
+    hr { border-color: var(--border); }
+
+    /* Result panel */
+    .result-panel { max-height: 260px; overflow-y: auto; }
+</style>
 <script id="tailwind-config">
-        tailwind.config = {
-          darkMode: "class",
-          theme: {
-            extend: {
-              colors: {
-                "on-primary-fixed-variant": "#4a006b",
-                "surface-variant": "#23262c",
-                "tertiary-container": "#7472fd",
-                "tertiary-dim": "#6462ec",
-                "on-error": "#490013",
-                "on-error-container": "#ffb2b9",
-                "on-tertiary": "#0e0078",
-                "inverse-surface": "#f9f9ff",
-                "background": "#0c0e12",
-                "on-primary-container": "#3c0057",
-                "on-secondary": "#49000f",
-                "primary-fixed": "#d37bff",
-                "secondary": "#ff6f7c",
-                "surface-tint": "#db90ff",
-                "on-background": "#f6f6fc",
-                "surface-container": "#171a1f",
-                "primary": "#db90ff",
-                "secondary-container": "#be0036",
-                "on-surface": "#f6f6fc",
-                "surface-container-low": "#111318",
-                "surface-bright": "#292c33",
-                "on-surface-variant": "#aaabb0",
-                "surface-container-high": "#1d2025",
-                "surface-container-lowest": "#000000",
-                "tertiary-fixed-dim": "#9999ff",
-                "on-primary-fixed": "#000000",
-                "primary-container": "#d37bff",
-                "error": "#ff6e84",
-                "on-primary": "#4e0070",
-                "error-container": "#a70138",
-                "on-secondary-container": "#fff6f5",
-                "on-tertiary-fixed-variant": "#2417b0",
-                "on-secondary-fixed-variant": "#a4002d",
-                "tertiary": "#9392ff",
-                "inverse-on-surface": "#53555a",
-                "outline": "#74757a",
-                "outline-variant": "#46484d",
-                "primary-fixed-dim": "#cb66fe",
-                "error-dim": "#d73357",
-                "on-secondary-fixed": "#6f001b",
-                "surface-dim": "#0c0e12",
-                "on-tertiary-fixed": "#090060",
-                "surface-container-highest": "#23262c",
-                "secondary-dim": "#e51245",
-                "primary-dim": "#d277ff",
-                "tertiary-fixed": "#a8a8ff",
-                "secondary-fixed": "#ffc3c4",
-                "secondary-fixed-dim": "#ffaeb2",
-                "inverse-primary": "#9027c4",
-                "surface": "#0c0e12",
-                "on-tertiary-container": "#000000"
-              },
-              fontFamily: {
-                "headline": ["Lexend"],
-                "body": ["Inter"],
-                "label": ["Inter"]
-              },
-              borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
-            },
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            accent:   '#6366f1',
+            danger:   '#f43f5e',
+            success:  '#10b981',
+            warning:  '#f59e0b',
           },
-        }
-    </script>
+        },
+      },
+    }
+</script>
 <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 </head>
-<body class="bg-surface text-on-surface min-h-screen pb-32">
-<!-- Floating Background Soul Gradient -->
-<div class="fixed inset-0 pointer-events-none -z-10 overflow-hidden">
-<div class="absolute top-[10%] right-[10%] w-[60%] h-[60%] bg-primary/10 blur-[140px] rounded-full animate-[bg-drift_20s_infinite_linear]"></div>
-<div class="absolute bottom-[20%] left-[5%] w-[50%] h-[50%] bg-secondary/5 blur-[120px] rounded-full animate-[bg-drift_15s_infinite_linear_reverse]"></div>
-<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[radial-gradient(circle_at_center,#1d2025_0%,transparent_100%)] opacity-20"></div>
+<body class="min-h-screen pb-32">
+
+<!-- Background -->
+<div class="fixed inset-0 pointer-events-none -z-10">
+    <div class="absolute top-0 right-0 w-[600px] h-[600px] rounded-full bg-indigo-600/5 blur-[120px]"></div>
+    <div class="absolute bottom-0 left-0 w-[500px] h-[500px] rounded-full bg-violet-600/5 blur-[100px]"></div>
 </div>
-<!-- Top Bar -->
-<header class="fixed top-0 w-full z-50 bg-slate-950/60 backdrop-blur-2xl flex justify-between items-center px-6 py-4 border-b border-white/5 shadow-2xl">
-<div class="flex items-center gap-3">
-<span class="material-symbols-outlined text-purple-400 text-3xl animate-pulse-slow" data-icon="bubble_chart">bubble_chart</span>
-<h1 class="text-2xl font-bold tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-fuchsia-500 font-lexend">NEURAL_SYNTH</h1>
-</div>
-<div class="relative group cursor-pointer">
-<span class="material-symbols-outlined text-slate-400 text-2xl group-hover:text-primary transition-colors p-2 rounded-full" data-icon="notifications">notifications</span>
-<span class="absolute top-2 right-2 w-2 h-2 bg-secondary rounded-full shadow-[0_0_12px_#ff6f7c] animate-pulse"></span>
-</div>
+
+<!-- Header -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-5 py-3.5 border-b" style="background:rgba(12,14,26,0.85); backdrop-filter:blur(24px); border-color:var(--border);">
+    <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center shadow-lg shadow-indigo-600/30">
+            <span class="material-symbols-outlined text-white text-base" style="font-variation-settings:'FILL' 1;">bug_report</span>
+        </div>
+        <div>
+            <h1 class="text-sm font-bold text-white tracking-tight leading-none">Bug Hunter</h1>
+            <p class="text-[10px] text-indigo-400 font-medium tracking-widest uppercase leading-none mt-0.5">Security Operations</p>
+        </div>
+    </div>
+    <div class="flex items-center gap-3">
+        <div class="flex items-center gap-1.5">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-status"></span>
+            <span class="text-[10px] text-emerald-400 font-semibold tracking-widest uppercase">Live</span>
+        </div>
+        <div class="relative cursor-pointer group">
+            <span class="material-symbols-outlined text-xl" style="color:var(--text-muted);">notifications</span>
+            <span class="absolute top-0.5 right-0.5 w-1.5 h-1.5 bg-red-500 rounded-full"></span>
+        </div>
+    </div>
 </header>
-<main id="main-content" class="pt-24 px-6 space-y-10">
 
-<!-- VIEW: PULSE (Scans) -->
-<div id="view-pulse" class="view-section space-y-10">
-<!-- Architecture Section: Bioluminescent Flow -->
-<section class="relative group">
-<div class="flex justify-between items-center mb-6">
-<h2 class="text-xs uppercase tracking-[0.2em] text-purple-400/70 font-lexend font-bold">Architecture Flow</h2>
-<span class="text-[10px] text-on-surface-variant font-mono bg-surface-container px-2 py-1 rounded-md">ENCRYPTED_LINK_042</span>
-</div>
-<div class="relative h-72 glass-panel rounded-[2.5rem] p-8 overflow-hidden animate-float card-interaction">
-<!-- Inner Glow -->
-<div class="absolute inset-0 bg-gradient-to-tr from-primary/5 via-transparent to-secondary/5 opacity-50"></div>
-<div class="relative h-full flex flex-col justify-between z-10">
-<!-- Top Nodes -->
-<div class="flex justify-between items-center px-4">
-<div class="flex flex-col items-center gap-3 group/node">
-<div class="w-14 h-14 rounded-2xl bg-surface-container-high flex items-center justify-center text-primary border border-primary/20 shadow-xl group-hover/node:scale-110 group-hover/node:border-primary/50 transition-all duration-500">
-<span class="material-symbols-outlined text-2xl" data-icon="login">login</span>
-</div>
-<span class="text-[9px] font-lexend font-bold tracking-[0.2em] text-on-surface-variant uppercase">Ingress</span>
-</div>
-<div class="flex flex-col items-center gap-3 group/node">
-<div class="w-16 h-16 rounded-full bg-primary/10 border border-primary/40 flex items-center justify-center text-primary shadow-[0_0_40px_rgba(219,144,255,0.25)] animate-pulse-slow group-hover/node:scale-110 transition-transform">
-<span class="material-symbols-outlined text-3xl" data-icon="settings_input_component">settings_input_component</span>
-</div>
-<span class="text-[9px] font-lexend font-bold tracking-[0.2em] text-primary uppercase">Kernel</span>
-</div>
-</div>
-<!-- Flow Lines -->
-<div class="absolute inset-0 flex items-center justify-center pointer-events-none">
-<div class="w-2/3 h-[2px] flow-line opacity-60"></div>
-<div class="absolute top-1/2 left-1/2 -translate-x-1/2 w-[1px] h-20 bg-gradient-to-b from-primary/40 to-transparent"></div>
-</div>
-<!-- Bottom Nodes -->
-<div class="flex justify-around items-center">
-<div class="flex flex-col items-center gap-3 group/node">
-<div class="w-14 h-14 rounded-2xl bg-surface-container-high flex items-center justify-center text-tertiary border border-tertiary/20 shadow-xl group-hover/node:scale-110 group-hover/node:border-tertiary/50 transition-all duration-500">
-<span class="material-symbols-outlined" data-icon="database">database</span>
-</div>
-<span class="text-[9px] font-lexend font-bold tracking-[0.2em] text-on-surface-variant uppercase">DB_Cluster</span>
-</div>
-<div class="flex flex-col items-center gap-3 group/node">
-<div class="w-14 h-14 rounded-2xl bg-surface-container-high flex items-center justify-center text-secondary border border-secondary/20 shadow-xl group-hover/node:scale-110 group-hover/node:border-secondary/50 transition-all duration-500">
-<span class="material-symbols-outlined" data-icon="security">security</span>
-</div>
-<span class="text-[9px] font-lexend font-bold tracking-[0.2em] text-on-surface-variant uppercase">Firewall</span>
-</div>
-</div>
-</div>
-</div>
-</section>
+<main id="main-content" class="pt-20 px-4 space-y-6">
 
-<!-- Scan Launch Console -->
-<section class="space-y-4">
-<h2 class="text-xs uppercase tracking-[0.2em] text-purple-400/70 font-lexend font-bold px-1">Launch Scan</h2>
-<div class="glass-panel rounded-[2rem] p-6 space-y-4">
-    <div class="flex flex-col gap-3">
-        <input id="scan-target" type="text" placeholder="Paste target domain or URL (e.g. scanme.nmap.org)" class="w-full bg-transparent border border-white/10 rounded-xl px-4 py-3.5 text-sm font-mono text-on-surface placeholder:text-on-surface-variant/50 focus:outline-none focus:border-primary/60 transition-colors" />
+<!-- ── VIEW: PULSE (Scans) ── -->
+<div id="view-pulse" class="view-section space-y-5 animate-fade-in">
+
+    <!-- Stats Row -->
+    <div class="grid grid-cols-3 gap-3 pt-2">
+        <div class="card p-4 text-center">
+            <p class="text-[10px] font-semibold uppercase tracking-widest" style="color:var(--text-muted);">Total Scans</p>
+            <p id="stat-scans" class="text-2xl font-bold text-indigo-400 mt-1">0</p>
+        </div>
+        <div class="card p-4 text-center">
+            <p class="text-[10px] font-semibold uppercase tracking-widest" style="color:var(--text-muted);">Nodes</p>
+            <p id="stat-nodes" class="text-2xl font-bold text-violet-400 mt-1">0</p>
+        </div>
+        <div class="card p-4 text-center">
+            <p class="text-[10px] font-semibold uppercase tracking-widest" style="color:var(--text-muted);">Status</p>
+            <p class="text-[11px] font-bold text-emerald-400 mt-1 tracking-widest uppercase">Online</p>
+        </div>
+    </div>
+
+    <!-- Scan Console -->
+    <div class="card p-5 space-y-3">
+        <div class="flex items-center justify-between mb-1">
+            <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-indigo-400 text-lg">radar</span>
+                <h2 class="text-sm font-bold text-white">Scan Console</h2>
+            </div>
+            <span class="badge badge-accent">Argus Engine</span>
+        </div>
+        <hr/>
+        <input id="scan-target" type="text" placeholder="Target domain or URL (e.g. scanme.nmap.org)" />
         <div class="flex gap-3">
-            <select id="scan-type" class="flex-1 bg-surface-container border border-white/10 rounded-xl px-4 py-3 text-xs font-lexend text-on-surface focus:outline-none focus:border-primary/60 transition-colors appearance-none cursor-pointer">
+            <select id="scan-type" class="flex-1" style="font-family:'JetBrains Mono',monospace; font-size:11px; background:#111320 !important; color:#e2e4f0 !important; border:1px solid rgba(255,255,255,0.06) !important;">
                 <option value="" disabled selected>Loading modules...</option>
             </select>
-            <button id="launch-btn" onclick="launchScan()" class="bg-gradient-to-r from-primary/20 to-fuchsia-500/20 hover:from-primary/30 hover:to-fuchsia-500/30 border border-primary/30 active:scale-95 transition-all px-8 py-3 rounded-xl font-lexend font-bold text-xs text-primary tracking-[0.15em] uppercase flex items-center gap-2 shadow-[0_0_20px_rgba(219,144,255,0.1)]">
-                <span class="material-symbols-outlined text-base">rocket_launch</span>
-                LAUNCH
+            <button id="launch-btn" onclick="launchScan()" class="flex items-center gap-2 px-5 py-2.5 rounded-[10px] text-white font-semibold text-xs uppercase tracking-widest transition-all active:scale-95"
+                style="background:linear-gradient(135deg,#6366f1,#8b5cf6); box-shadow: 0 4px 15px rgba(99,102,241,0.35); flex-shrink:0; white-space:nowrap;">
+                <span class="material-symbols-outlined text-sm">rocket_launch</span>
+                Launch
             </button>
         </div>
     </div>
-</div>
-</section>
 
-<!-- Active Modules (Argus Jobs) -->
-<section class="space-y-4">
-<div class="flex justify-between items-center px-1">
-    <h2 class="text-xs uppercase tracking-[0.2em] text-purple-400/70 font-lexend font-bold">Active Modules</h2>
-    <span id="job-count" class="text-[10px] text-on-surface-variant font-mono bg-surface-container px-2 py-1 rounded-md">0 JOBS</span>
-</div>
-<div id="active-modules-container" class="grid grid-cols-1 gap-5">
-    <div class="text-center text-xs text-on-surface-variant py-8 font-mono">NO ACTIVE SCANS — LAUNCH ONE ABOVE</div>
-</div>
-</section>
-</div>
-
-<!-- VIEW: CORE (Alerts & Stats) -->
-<div id="view-core" class="view-section hidden space-y-10">
-<!-- Threat Alert -->
-<section class="animate-float-delayed">
-<div class="bg-gradient-to-br from-secondary-container/30 to-surface-container-highest/60 backdrop-blur-3xl rounded-[2.5rem] p-8 relative overflow-hidden shadow-[0_20px_60px_rgba(190,0,54,0.2)] border border-secondary/30 card-interaction">
-<div class="absolute -top-12 -right-12 w-48 h-48 bg-secondary/10 blur-[60px] rounded-full animate-pulse-slow"></div>
-<div class="flex items-center gap-6 relative z-10">
-<div class="w-16 h-16 rounded-2xl bg-secondary/20 flex items-center justify-center text-secondary border border-secondary/30 shadow-[0_0_30px_rgba(255,111,124,0.2)]">
-<span class="material-symbols-outlined text-4xl animate-bounce" data-icon="report_problem" style="animation-duration: 2s;">report_problem</span>
-</div>
-<div class="flex-1">
-<span class="text-[10px] font-lexend font-extrabold text-secondary tracking-[0.25em] uppercase px-2 py-0.5 bg-secondary/10 rounded">Critical Alert</span>
-<h3 class="font-lexend text-xl font-extrabold leading-tight mt-2 text-white">OPEN PORT SCANNING</h3>
-<p class="text-xs text-on-surface-variant mt-1.5 font-medium">Unauthorized ingress attempt detected on Vector-9 Cluster.</p>
-</div>
-</div>
-<div class="mt-8 flex gap-4 relative z-10">
-<button class="flex-1 bg-secondary text-on-secondary font-lexend font-bold text-xs py-4 rounded-2xl uppercase tracking-[0.2em] shadow-lg shadow-secondary/20 active:scale-95 transition-all duration-300 hover:brightness-110">
-                        QUARANTINE
-                    </button>
-<button class="px-6 bg-surface-container-highest text-on-surface font-lexend font-bold text-xs py-4 rounded-2xl uppercase tracking-[0.2em] border border-white/10 active:scale-95 transition-all duration-300 hover:bg-white/5">
-                        IGNORE
-                    </button>
-</div>
-</div>
-</section>
-<!-- System Stats Grid -->
-<section class="grid grid-cols-2 gap-5">
-<div class="glass-panel rounded-[2rem] p-6 flex flex-col justify-between h-36 card-interaction">
-<span class="text-[9px] text-on-surface-variant font-lexend font-bold tracking-[0.2em] uppercase">Total Scans</span>
-<div>
-<span id="stat-scans" class="text-4xl font-lexend font-bold text-primary tracking-tighter">0</span>
-<div class="flex items-center gap-1 mt-1">
-<span class="material-symbols-outlined text-[10px] text-primary" data-icon="trending_up">trending_up</span>
-<span class="text-[10px] text-primary/80 font-mono font-bold">Active</span>
-</div>
-</div>
-</div>
-<div class="glass-panel rounded-[2rem] p-6 flex flex-col justify-between h-36 card-interaction">
-<span class="text-[9px] text-on-surface-variant font-lexend font-bold tracking-[0.2em] uppercase">Registered Nodes</span>
-<div>
-<span id="stat-nodes" class="text-4xl font-lexend font-bold text-secondary tracking-tighter">0</span>
-<div class="flex items-center gap-1 mt-1">
-<span class="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse"></span>
-<span class="text-[10px] text-secondary/80 font-mono font-bold tracking-widest uppercase">Online</span>
-</div>
-</div>
-</div>
-</section>
-</div>
-
-<!-- VIEW: NODES (Users) -->
-<div id="view-nodes" class="view-section hidden space-y-6">
-    <h2 class="text-xs uppercase tracking-[0.2em] text-purple-400/70 font-lexend font-bold px-1">Registered Nodes</h2>
-    <div id="nodes-container" class="space-y-4">
-        <div class="text-center text-xs text-on-surface-variant py-8 font-mono">FETCHING NODES...</div>
+    <!-- Active Modules -->
+    <div class="space-y-3">
+        <div class="flex items-center justify-between px-1">
+            <h2 class="text-xs font-bold uppercase tracking-widest" style="color:var(--text-muted);">Active Jobs</h2>
+            <span id="job-count" class="badge badge-muted">0 Jobs</span>
+        </div>
+        <div id="active-modules-container">
+            <div class="card p-8 text-center" style="color:var(--text-muted); font-size:12px; font-family:'JetBrains Mono',monospace;">
+                NO ACTIVE SCANS — LAUNCH ONE ABOVE
+            </div>
+        </div>
     </div>
 </div>
 
-<!-- VIEW: SYNAPSE (Logins) -->
-<div id="view-synapse" class="view-section hidden space-y-6">
-    <h2 class="text-xs uppercase tracking-[0.2em] text-purple-400/70 font-lexend font-bold px-1">Synapse Activity</h2>
-    <div id="synapse-container" class="space-y-4">
-        <div class="text-center text-xs text-on-surface-variant py-8 font-mono">FETCHING SYNAPSE LOGS...</div>
+<!-- ── VIEW: CORE (Alerts & Stats) ── -->
+<div id="view-core" class="view-section hidden space-y-5 animate-fade-in">
+
+    <!-- Threat Alert -->
+    <div class="card p-5 border-red-500/20" style="background:rgba(244,63,94,0.06); border-color:rgba(244,63,94,0.2);">
+        <div class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style="background:rgba(244,63,94,0.15);">
+                <span class="material-symbols-outlined text-red-400 text-xl" style="font-variation-settings:'FILL' 1;">warning</span>
+            </div>
+            <div class="flex-1">
+                <div class="flex items-center justify-between">
+                    <span class="badge badge-danger">Critical Alert</span>
+                    <span class="text-[10px]" style="color:var(--text-muted); font-family:'JetBrains Mono'">NOW</span>
+                </div>
+                <h3 class="text-sm font-bold text-white mt-2">OPEN PORT SCANNING DETECTED</h3>
+                <p class="text-xs mt-1" style="color:var(--text-muted);">Unauthorized ingress attempt detected on Vector-9 Cluster. Immediate action required.</p>
+            </div>
+        </div>
+        <div class="flex gap-3 mt-4">
+            <button class="flex-1 py-2.5 rounded-[10px] text-white text-xs font-bold uppercase tracking-widest transition-all active:scale-95"
+                style="background:var(--danger); box-shadow:0 2px 12px rgba(244,63,94,0.3);">Quarantine</button>
+            <button class="px-5 py-2.5 rounded-[10px] text-xs font-bold uppercase tracking-widest transition-all active:scale-95"
+                style="background:var(--surface-4); color:var(--text-muted); border:1px solid var(--border);">Dismiss</button>
+        </div>
+    </div>
+
+    <!-- Architecture Flow -->
+    <div class="card p-5">
+        <div class="flex items-center gap-2 mb-4">
+            <span class="material-symbols-outlined text-indigo-400 text-lg">account_tree</span>
+            <h2 class="text-sm font-bold text-white">Architecture Flow</h2>
+        </div>
+        <hr class="mb-4"/>
+        <div class="flex items-center justify-between">
+            <div class="flex flex-col items-center gap-2">
+                <div class="w-12 h-12 rounded-xl flex items-center justify-center" style="background:var(--surface-4); border:1px solid var(--border);">
+                    <span class="material-symbols-outlined text-indigo-400">login</span>
+                </div>
+                <span class="text-[9px] font-bold uppercase tracking-widest" style="color:var(--text-muted);">Ingress</span>
+            </div>
+            <div class="flex-1 mx-3 flex items-center">
+                <div class="h-px flex-1" style="background:linear-gradient(90deg, rgba(99,102,241,0.5), rgba(139,92,246,0.5));"></div>
+                <span class="w-1.5 h-1.5 rounded-full bg-indigo-400 mx-1"></span>
+                <div class="h-px flex-1" style="background:linear-gradient(90deg, rgba(139,92,246,0.5), rgba(99,102,241,0.5));"></div>
+            </div>
+            <div class="flex flex-col items-center gap-2">
+                <div class="w-12 h-12 rounded-xl flex items-center justify-center" style="background:rgba(99,102,241,0.12); border:1px solid rgba(99,102,241,0.3);">
+                    <span class="material-symbols-outlined text-indigo-400">settings_input_component</span>
+                </div>
+                <span class="text-[9px] font-bold uppercase tracking-widest text-indigo-400">Kernel</span>
+            </div>
+            <div class="flex-1 mx-3 flex items-center">
+                <div class="h-px flex-1" style="background:linear-gradient(90deg, rgba(99,102,241,0.5), rgba(16,185,129,0.5));"></div>
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 mx-1"></span>
+                <div class="h-px flex-1" style="background:linear-gradient(90deg, rgba(16,185,129,0.5), rgba(99,102,241,0.5));"></div>
+            </div>
+            <div class="flex flex-col items-center gap-2">
+                <div class="w-12 h-12 rounded-xl flex items-center justify-center" style="background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.2);">
+                    <span class="material-symbols-outlined text-emerald-400">database</span>
+                </div>
+                <span class="text-[9px] font-bold uppercase tracking-widest" style="color:var(--text-muted);">DB Cluster</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- System Stats -->
+    <div class="grid grid-cols-2 gap-3">
+        <div class="card p-5">
+            <p class="text-[10px] font-semibold uppercase tracking-widest" style="color:var(--text-muted);">Total Scans</p>
+            <p id="stat-scans-core" class="text-3xl font-bold text-indigo-400 mt-2">0</p>
+            <div class="flex items-center gap-1.5 mt-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-status"></span>
+                <span class="text-[10px] text-indigo-400 font-semibold">Active</span>
+            </div>
+        </div>
+        <div class="card p-5">
+            <p class="text-[10px] font-semibold uppercase tracking-widest" style="color:var(--text-muted);">Registered Nodes</p>
+            <p id="stat-nodes-core" class="text-3xl font-bold text-violet-400 mt-2">0</p>
+            <div class="flex items-center gap-1.5 mt-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-violet-400 animate-status"></span>
+                <span class="text-[10px] text-violet-400 font-semibold">Online</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ── VIEW: NODES (Users) ── -->
+<div id="view-nodes" class="view-section hidden space-y-4 animate-fade-in">
+    <div class="flex items-center justify-between px-1 pt-2">
+        <h2 class="text-xs font-bold uppercase tracking-widest" style="color:var(--text-muted);">Registered Nodes</h2>
+    </div>
+    <div id="nodes-container">
+        <div class="card p-8 text-center text-xs" style="color:var(--text-muted); font-family:'JetBrains Mono',monospace;">
+            FETCHING NODES...
+        </div>
+    </div>
+</div>
+
+<!-- ── VIEW: SYNAPSE (Logins) ── -->
+<div id="view-synapse" class="view-section hidden space-y-4 animate-fade-in">
+    <div class="flex items-center justify-between px-1 pt-2">
+        <h2 class="text-xs font-bold uppercase tracking-widest" style="color:var(--text-muted);">Login Events</h2>
+    </div>
+    <div id="synapse-container">
+        <div class="card p-8 text-center text-xs" style="color:var(--text-muted); font-family:'JetBrains Mono',monospace;">
+            FETCHING LOGS...
+        </div>
     </div>
 </div>
 
 </main>
-<!-- Bottom Navigation Bar -->
-<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-8 pt-4 bg-slate-950/70 backdrop-blur-3xl rounded-t-[2.5rem] z-50 border-t border-white/5 shadow-[0_-20px_50px_rgba(0,0,0,0.6)]">
-<!-- Nodes -->
-<div id="nav-nodes" onclick="switchTab('nodes')" class="nav-item flex flex-col items-center justify-center text-slate-500 py-2 hover:text-primary transition-all cursor-pointer group relative px-8">
-<div class="absolute inset-0 bg-primary/15 rounded-2xl blur-md animate-pulse hidden nav-bg"></div>
-<div class="relative flex flex-col items-center justify-center group-hover:scale-110 transition-transform z-10">
-<span class="material-symbols-outlined mb-1 nav-icon group-hover:-translate-y-1 transition-transform" data-icon="hub">hub</span>
-<span class="font-lexend text-[8px] uppercase tracking-[0.2em] font-bold">Nodes</span>
-</div>
-</div>
-<!-- Synapse -->
-<div id="nav-synapse" onclick="switchTab('synapse')" class="nav-item flex flex-col items-center justify-center text-slate-500 py-2 hover:text-primary transition-all cursor-pointer group relative px-8">
-<div class="absolute inset-0 bg-primary/15 rounded-2xl blur-md animate-pulse hidden nav-bg"></div>
-<div class="relative flex flex-col items-center justify-center group-hover:scale-110 transition-transform z-10">
-<span class="material-symbols-outlined mb-1 nav-icon group-hover:-translate-y-1 transition-transform" data-icon="psychology">psychology</span>
-<span class="font-lexend text-[8px] uppercase tracking-[0.2em] font-bold">Synapse</span>
-</div>
-</div>
-<!-- Pulse (Active) -->
-<div id="nav-pulse" onclick="switchTab('pulse')" class="nav-item flex flex-col items-center justify-center text-primary py-2 hover:text-primary transition-all cursor-pointer group relative px-8">
-<div class="absolute inset-0 bg-primary/15 rounded-2xl blur-md animate-pulse nav-bg"></div>
-<div class="relative flex flex-col items-center justify-center group-hover:scale-110 transition-transform z-10">
-<span class="material-symbols-outlined mb-1 status-glow nav-icon" data-icon="sensors">sensors</span>
-<span class="font-lexend text-[8px] uppercase tracking-[0.2em] font-extrabold">Pulse</span>
-</div>
-</div>
-<!-- Core -->
-<div id="nav-core" onclick="switchTab('core')" class="nav-item flex flex-col items-center justify-center text-slate-500 py-2 hover:text-primary transition-all cursor-pointer group relative px-8">
-<div class="absolute inset-0 bg-primary/15 rounded-2xl blur-md animate-pulse hidden nav-bg"></div>
-<div class="relative flex flex-col items-center justify-center group-hover:scale-110 transition-transform z-10">
-<span class="material-symbols-outlined mb-1 nav-icon group-hover:-translate-y-1 transition-transform" data-icon="account_tree">account_tree</span>
-<span class="font-lexend text-[8px] uppercase tracking-[0.2em] font-bold">Core</span>
-</div>
-</div>
+
+<!-- Bottom Navigation -->
+<nav class="fixed bottom-0 left-0 w-full z-50 border-t px-4 pb-6 pt-2"
+     style="background:rgba(12,14,26,0.92); backdrop-filter:blur(24px); border-color:var(--border);">
+    <div class="flex justify-around items-center">
+
+        <div id="nav-nodes" onclick="switchTab('nodes')"
+             class="nav-item flex flex-col items-center gap-1 cursor-pointer group transition-all" style="color:var(--text-muted);">
+            <div class="nav-pill flex items-center justify-center w-10 h-10 rounded-xl border border-transparent transition-all group-hover:border-indigo-500/20 group-hover:bg-indigo-500/10">
+                <span class="material-symbols-outlined text-xl nav-icon">hub</span>
+            </div>
+            <span class="text-[9px] font-bold uppercase tracking-widest">Nodes</span>
+        </div>
+
+        <div id="nav-synapse" onclick="switchTab('synapse')"
+             class="nav-item flex flex-col items-center gap-1 cursor-pointer group transition-all" style="color:var(--text-muted);">
+            <div class="nav-pill flex items-center justify-center w-10 h-10 rounded-xl border border-transparent transition-all group-hover:border-indigo-500/20 group-hover:bg-indigo-500/10">
+                <span class="material-symbols-outlined text-xl nav-icon">manage_history</span>
+            </div>
+            <span class="text-[9px] font-bold uppercase tracking-widest">Events</span>
+        </div>
+
+        <div id="nav-pulse" onclick="switchTab('pulse')"
+             class="nav-item nav-active flex flex-col items-center gap-1 cursor-pointer group transition-all">
+            <div class="nav-pill flex items-center justify-center w-12 h-12 rounded-xl border transition-all"
+                 style="background:rgba(99,102,241,0.2); border-color:rgba(99,102,241,0.4); box-shadow:0 0 20px rgba(99,102,241,0.2);">
+                <span class="material-symbols-outlined text-2xl nav-icon text-indigo-400" style="font-variation-settings:'FILL' 1;">radar</span>
+            </div>
+            <span class="text-[9px] font-bold uppercase tracking-widest text-indigo-400">Pulse</span>
+        </div>
+
+        <div id="nav-core" onclick="switchTab('core')"
+             class="nav-item flex flex-col items-center gap-1 cursor-pointer group transition-all" style="color:var(--text-muted);">
+            <div class="nav-pill flex items-center justify-center w-10 h-10 rounded-xl border border-transparent transition-all group-hover:border-indigo-500/20 group-hover:bg-indigo-500/10">
+                <span class="material-symbols-outlined text-xl nav-icon">security</span>
+            </div>
+            <span class="text-[9px] font-bold uppercase tracking-widest">Core</span>
+        </div>
+
+    </div>
 </nav>
 
 <script>
-    const API_URL = "http://127.0.0.1:5000/api";
+    const API_URL   = "http://127.0.0.1:5000/api";
     const ARGUS_URL = "http://127.0.0.1:5000/api/argus";
     let jwtToken = null;
 
     const sectionMeta = {
-        'Network & Infrastructure':      { icon: 'lan',         colorClass: 'text-primary',   bgClass: 'bg-primary' },
-        'Web Application Analysis':      { icon: 'language',    colorClass: 'text-tertiary',  bgClass: 'bg-tertiary' },
-        'Security & Threat Intelligence': { icon: 'shield_lock', colorClass: 'text-secondary', bgClass: 'bg-secondary' }
+        'Network & Infrastructure':       { icon: 'lan',      color: 'text-indigo-400',  badge: 'badge-accent'  },
+        'Web Application Analysis':        { icon: 'language', color: 'text-violet-400',  badge: 'badge-accent'  },
+        'Security & Threat Intelligence':  { icon: 'shield',   color: 'text-emerald-400', badge: 'badge-success' }
     };
 
     // ── Load Modules ──
@@ -376,10 +427,10 @@
             if (data.success) {
                 const select = document.getElementById('scan-type');
                 select.innerHTML = '';
-                const sectionIcons = { 'Network & Infrastructure': '⚡', 'Web Application Analysis': '🌐', 'Security & Threat Intelligence': '🔒' };
+                const icons = { 'Network & Infrastructure': '⚡', 'Web Application Analysis': '🌐', 'Security & Threat Intelligence': '🔒' };
                 for (const [section, mods] of Object.entries(data.modules)) {
                     const group = document.createElement('optgroup');
-                    group.label = `${sectionIcons[section] || '📦'} ${section}`;
+                    group.label = `${icons[section] || '📦'} ${section}`;
                     mods.forEach(m => {
                         const opt = document.createElement('option');
                         opt.value = m.module_id;
@@ -394,7 +445,6 @@
 
     // ── Init ──
     async function init() {
-        console.log("Initializing Dashboard...");
         await loadModules();
         try {
             const resp = await fetch(`${API_URL}/auth/login`, {
@@ -405,31 +455,32 @@
             const data = await resp.json();
             if (data.access_token) {
                 jwtToken = data.access_token;
-                console.log("Authenticated successfully.");
                 await fetchUsers();
                 await fetchLogins();
                 await refreshArgusJobs();
-
                 const socket = io("http://127.0.0.1:5000");
                 socket.on('scan_update', () => refreshArgusJobs());
             } else {
-                document.getElementById('active-modules-container').innerHTML = `<div class="text-secondary text-xs text-center py-8 font-mono">AUTH FAILURE</div>`;
+                document.getElementById('active-modules-container').innerHTML =
+                    `<div class="card p-8 text-center text-xs" style="color:var(--danger); font-family:'JetBrains Mono',monospace;">AUTH FAILURE — CHECK CREDENTIALS</div>`;
             }
         } catch(e) {
-            console.error(e);
-            document.getElementById('active-modules-container').innerHTML = `<div class="text-secondary text-xs text-center py-8 font-mono">CONNECTION DROPPED</div>`;
+            document.getElementById('active-modules-container').innerHTML =
+                `<div class="card p-8 text-center text-xs" style="color:var(--danger); font-family:'JetBrains Mono',monospace;">CONNECTION ERROR — BACKEND OFFLINE</div>`;
         }
     }
 
-    // ── Argus Job Fetching ──
+    // ── Argus Jobs ──
     async function refreshArgusJobs() {
         try {
             const resp = await fetch(`${ARGUS_URL}/jobs`);
             const data = await resp.json();
             if (data.success) {
                 renderArgusJobs(data.jobs);
-                document.getElementById('stat-scans').innerText = data.jobs.length;
-                document.getElementById('job-count').innerText = `${data.jobs.length} JOBS`;
+                const count = data.jobs.length;
+                document.getElementById('stat-scans').innerText = count;
+                document.getElementById('stat-scans-core').innerText = count;
+                document.getElementById('job-count').innerText = `${count} Job${count !== 1 ? 's' : ''}`;
             }
         } catch(e) { console.error("Failed to fetch Argus jobs", e); }
     }
@@ -437,91 +488,81 @@
     function renderArgusJobs(jobs) {
         const container = document.getElementById('active-modules-container');
         if (!jobs || jobs.length === 0) {
-            container.innerHTML = `<div class="text-on-surface-variant text-xs text-center py-8 font-mono">NO ACTIVE SCANS — LAUNCH ONE ABOVE</div>`;
+            container.innerHTML = `<div class="card p-8 text-center text-xs" style="color:var(--text-muted); font-family:'JetBrains Mono',monospace;">NO ACTIVE SCANS — LAUNCH ONE ABOVE</div>`;
             return;
         }
-
-        // Sort: running first, then queued, then completed/failed
         const order = { running: 0, queued: 1, completed: 2, failed: 3 };
         jobs.sort((a, b) => (order[a.status] ?? 9) - (order[b.status] ?? 9));
 
         container.innerHTML = jobs.map(job => {
-            const meta = sectionMeta[job.section] || { icon: 'memory', colorClass: 'text-primary', bgClass: 'bg-primary' };
+            const meta = sectionMeta[job.section] || { icon: 'memory', color: 'text-indigo-400', badge: 'badge-accent' };
             const label = job.module_name || `Module ${job.module_id}`;
-            const isRunning = job.status === 'running' || job.status === 'queued';
-            const isFailed = job.status === 'failed';
+            const isRunning   = job.status === 'running' || job.status === 'queued';
+            const isFailed    = job.status === 'failed';
             const isCompleted = job.status === 'completed';
 
-            const statusColor = isRunning ? meta.colorClass : (isFailed ? 'text-red-400' : 'text-on-surface-variant');
-            const statusText = job.status.toUpperCase();
-            const statusGlow = isRunning ? 'status-glow' : '';
-            const pulseMarkup = isRunning ? `<span class="w-1.5 h-1.5 rounded-full ${meta.bgClass} animate-pulse shadow-[0_0_8px_#db90ff]"></span>` : '';
+            const statusBadge = isRunning
+                ? `<span class="badge badge-accent"><span class="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-status"></span>Running</span>`
+                : isFailed
+                ? `<span class="badge badge-danger">Failed</span>`
+                : `<span class="badge badge-success">Done</span>`;
 
-            let progMarkup = '';
+            const topIcon = isRunning ? 'sync' : (isFailed ? 'cancel' : 'check_circle');
+            const topIconColor = isRunning ? 'text-indigo-400 animate-spin-slow' : (isFailed ? 'text-red-400' : 'text-emerald-400');
+
+            let progress = '';
             if (isRunning) {
-                progMarkup = `
-                <div class="space-y-2 mt-5">
-                    <div class="flex justify-between text-[10px] font-mono ${meta.colorClass} font-bold">
-                        <span>SCANNING ${job.target} [Module ${job.module_id}]</span>
-                        <span class="animate-pulse">ACTIVE</span>
+                progress = `
+                <div class="mt-4 space-y-2">
+                    <div class="flex justify-between text-[10px]" style="color:var(--text-muted); font-family:'JetBrains Mono',monospace;">
+                        <span>SCANNING ${job.target}</span>
+                        <span class="text-indigo-400 animate-status">ACTIVE</span>
                     </div>
-                    <div class="h-2 w-full bg-surface-container rounded-full overflow-hidden">
-                        <div class="h-full bg-gradient-to-r from-purple-500 via-fuchsia-500 to-purple-500 bg-[length:200%_100%] flow-line w-[80%] rounded-full"></div>
+                    <div class="h-1.5 rounded-full overflow-hidden" style="background:var(--surface-4);">
+                        <div class="h-full w-3/4 rounded-full progress-shimmer"></div>
                     </div>
                 </div>`;
             } else if (isCompleted) {
                 const parsed = job.parsed_result || {};
-                const summary = parsed.summary || 'Scan complete';
+                const summary = parsed.summary || 'Scan complete.';
                 const lines = parsed.lines || [];
-                let detailMarkup = '';
-
-                if (lines.length > 0) {
-                    detailMarkup = `<div class="result-panel mt-3 text-[10px] font-mono text-on-surface-variant space-y-1">${lines.map(l => `<div class="px-2 py-1 bg-surface-container rounded">${l}</div>`).join('')}</div>`;
-                }
-
-                progMarkup = `
-                <div class="mt-5">
-                    <div class="text-[10px] font-mono text-tertiary font-bold mb-2">${summary}</div>
-                    <div class="h-2 w-full bg-tertiary/10 rounded-full overflow-hidden">
-                        <div class="h-full bg-tertiary/40 w-full rounded-full"></div>
+                const detail = lines.length > 0
+                    ? `<div class="result-panel mt-2 space-y-1">${lines.map(l => `<div class="text-[10px] px-2 py-1 rounded-md" style="background:var(--surface-4); font-family:'JetBrains Mono',monospace; color:var(--text-muted);">${l}</div>`).join('')}</div>`
+                    : '';
+                progress = `
+                <div class="mt-4">
+                    <p class="text-[10px] text-emerald-400 font-semibold font-mono mb-2">${summary}</p>
+                    <div class="h-1.5 rounded-full overflow-hidden" style="background:var(--surface-4);">
+                        <div class="h-full w-full rounded-full" style="background:rgba(16,185,129,0.5);"></div>
                     </div>
-                    ${detailMarkup}
+                    ${detail}
                 </div>`;
             } else if (isFailed) {
-                progMarkup = `
-                <div class="mt-5">
-                    <div class="text-[10px] font-mono text-red-400 font-bold">${job.error || 'Unknown error'}</div>
-                    <div class="h-2 w-full bg-red-500/10 rounded-full overflow-hidden">
-                        <div class="h-full bg-red-500/40 w-full rounded-full"></div>
+                progress = `
+                <div class="mt-4">
+                    <p class="text-[10px] text-red-400 font-semibold font-mono mb-2">${job.error || 'Unknown error occurred.'}</p>
+                    <div class="h-1.5 rounded-full overflow-hidden" style="background:var(--surface-4);">
+                        <div class="h-full w-full rounded-full" style="background:rgba(244,63,94,0.4);"></div>
                     </div>
                 </div>`;
             }
 
-            const topIcon = isRunning ? 'sync' : (isFailed ? 'error' : 'check_circle');
-            const topIconColor = isRunning ? meta.colorClass : (isFailed ? 'text-red-400' : 'text-tertiary');
-            const topIconAnim = isRunning ? 'animate-spin-slow' : '';
-
             return `
-            <div class="glass-panel rounded-[2rem] p-6 relative overflow-hidden card-interaction ${isRunning ? 'animate-float' : ''}">
-                <div class="absolute top-0 right-0 p-5">
-                    <span class="material-symbols-outlined ${topIconColor} text-sm ${topIconAnim}">${topIcon}</span>
+            <div class="card p-5 relative animate-fade-in">
+                <div class="absolute top-4 right-4">
+                    <span class="material-symbols-outlined text-lg ${topIconColor}" style="font-variation-settings:'FILL' 1;">${topIcon}</span>
                 </div>
-                <div class="flex flex-col">
-                    <div class="flex items-center gap-4 ${!isRunning ? 'opacity-70' : ''}">
-                        <div class="w-12 h-12 rounded-2xl ${meta.bgClass}/10 flex items-center justify-center ${meta.colorClass} ${isRunning ? 'shadow-[inset_0_0_10px_rgba(219,144,255,0.2)]' : ''}">
-                            <span class="material-symbols-outlined text-2xl">${meta.icon}</span>
-                        </div>
-                        <div>
-                            <h3 class="font-lexend text-sm font-bold tracking-tight">${label}</h3>
-                            <div class="flex items-center gap-2 mt-0.5">
-                                ${pulseMarkup}
-                                <p class="text-[9px] ${statusColor} font-bold tracking-widest uppercase ${statusGlow}">Status: ${statusText}</p>
-                            </div>
-                            <p class="text-[9px] text-on-surface-variant font-mono mt-0.5">${job.target}</p>
-                        </div>
+                <div class="flex items-center gap-3 pr-8">
+                    <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style="background:var(--surface-4);">
+                        <span class="material-symbols-outlined text-xl ${meta.color}">${meta.icon}</span>
                     </div>
-                    ${progMarkup}
+                    <div class="min-w-0">
+                        <h3 class="text-sm font-semibold text-white truncate">${label}</h3>
+                        <p class="text-[10px] mt-0.5 truncate" style="color:var(--text-muted); font-family:'JetBrains Mono',monospace;">${job.target}</p>
+                        <div class="mt-1.5">${statusBadge}</div>
+                    </div>
                 </div>
+                ${progress}
             </div>`;
         }).join('');
     }
@@ -532,19 +573,13 @@
         const typeSelect  = document.getElementById('scan-type');
         const launchBtn   = document.getElementById('launch-btn');
 
-        const target = targetInput.value.trim();
+        const target   = targetInput.value.trim();
         const moduleId = parseInt(typeSelect.value);
 
-        if (!target) {
-            alert("Please enter a valid target URL or domain.");
-            return;
-        }
-        if (!moduleId) {
-            alert("Please select a module.");
-            return;
-        }
+        if (!target)   { alert("Please enter a valid target URL or domain."); return; }
+        if (!moduleId) { alert("Please select a module."); return; }
 
-        launchBtn.innerHTML = '<span class="material-symbols-outlined text-base animate-spin-slow">progress_activity</span> LAUNCHING...';
+        launchBtn.innerHTML = '<span class="material-symbols-outlined text-sm animate-spin-slow">progress_activity</span> Launching...';
         launchBtn.disabled = true;
 
         try {
@@ -553,11 +588,9 @@
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ module_id: moduleId, target, threads: 10 })
             });
-
             const data = await resp.json();
             if (data.success) {
                 targetInput.value = '';
-                // Start polling this job
                 pollJob(data.job.job_id);
                 await refreshArgusJobs();
             } else {
@@ -566,7 +599,7 @@
         } catch(e) {
             alert("Connection error: " + e.message);
         } finally {
-            launchBtn.innerHTML = '<span class="material-symbols-outlined text-base">rocket_launch</span> LAUNCH';
+            launchBtn.innerHTML = '<span class="material-symbols-outlined text-sm">rocket_launch</span> Launch';
             launchBtn.disabled = false;
         }
     }
@@ -579,13 +612,9 @@
                 const data = await resp.json();
                 if (data.success && data.job) {
                     await refreshArgusJobs();
-                    if (data.job.status === 'completed' || data.job.status === 'failed') {
-                        clearInterval(interval);
-                    }
+                    if (data.job.status === 'completed' || data.job.status === 'failed') clearInterval(interval);
                 }
-            } catch(e) {
-                clearInterval(interval);
-            }
+            } catch(e) { clearInterval(interval); }
         }, 3000);
     }
 
@@ -596,22 +625,22 @@
             const resp = await fetch(`${API_URL}/admin/users`, {
                 headers: { "Authorization": `Bearer ${jwtToken}` }
             });
-            if(resp.ok) {
+            if (resp.ok) {
                 const users = await resp.json();
                 document.getElementById('stat-nodes').innerText = users.length;
-                const container = document.getElementById('nodes-container');
-                container.innerHTML = users.map(u => `
-                    <div class="glass-panel rounded-2xl p-4 flex items-center justify-between card-interaction">
+                document.getElementById('stat-nodes-core').innerText = users.length;
+                document.getElementById('nodes-container').innerHTML = users.map(u => `
+                    <div class="card p-4 flex items-center justify-between animate-fade-in">
                         <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary border border-primary/20 shadow-[0_0_15px_rgba(219,144,255,0.1)]">
-                                <span class="material-symbols-outlined text-xl">person</span>
+                            <div class="w-9 h-9 rounded-xl flex items-center justify-center" style="background:rgba(99,102,241,0.15); border:1px solid rgba(99,102,241,0.25);">
+                                <span class="material-symbols-outlined text-indigo-400 text-lg" style="font-variation-settings:'FILL' 1;">person</span>
                             </div>
                             <div>
-                                <h3 class="font-lexend text-sm font-bold text-white">${u.username}</h3>
-                                <p class="text-[10px] text-on-surface-variant uppercase tracking-widest font-bold">ID: ${u.id}</p>
+                                <p class="text-sm font-semibold text-white">${u.username}</p>
+                                <p class="text-[10px]" style="color:var(--text-muted); font-family:'JetBrains Mono',monospace;">ID: ${u.id}</p>
                             </div>
                         </div>
-                        <span class="px-3 py-1 rounded bg-surface-container text-[9px] font-lexend font-bold text-primary uppercase tracking-widest border border-primary/20">${u.role}</span>
+                        <span class="badge badge-accent">${u.role}</span>
                     </div>
                 `).join('');
             }
@@ -625,19 +654,19 @@
             const resp = await fetch(`${API_URL}/admin/login-events`, {
                 headers: { "Authorization": `Bearer ${jwtToken}` }
             });
-            if(resp.ok) {
+            if (resp.ok) {
                 const events = await resp.json();
-                const container = document.getElementById('synapse-container');
-                container.innerHTML = events.map(e => `
-                    <div class="glass-panel rounded-2xl p-4 flex flex-col gap-2 card-interaction">
-                        <div class="flex justify-between items-center">
-                            <span class="text-xs font-lexend font-bold text-tertiary uppercase tracking-widest">${e.username || 'UNKNOWN'}</span>
-                            <span class="text-[9px] font-mono text-on-surface-variant">${new Date(e.timestamp).toLocaleString()}</span>
+                document.getElementById('synapse-container').innerHTML = events.map(e => `
+                    <div class="card p-4 space-y-2 animate-fade-in">
+                        <div class="flex items-center justify-between">
+                            <p class="text-sm font-semibold text-white">${e.username || 'Unknown'}</p>
+                            <span class="text-[10px]" style="color:var(--text-muted);">${new Date(e.timestamp).toLocaleString()}</span>
                         </div>
-                        <div class="text-[10px] font-mono text-on-surface-variant flex flex-col gap-1">
-                            <div><span class="text-primary font-bold">IP:</span> ${e.ip_address}</div>
-                            <div><span class="text-secondary font-bold">MAC:</span> ${e.mac_address}</div>
-                            <div class="truncate" title="${e.user_agent}"><span class="text-tertiary font-bold">AGENT:</span> ${e.user_agent}</div>
+                        <hr/>
+                        <div class="space-y-1 text-[11px]" style="font-family:'JetBrains Mono',monospace; color:var(--text-muted);">
+                            <div><span class="text-indigo-400 font-bold">IP  </span>${e.ip_address}</div>
+                            <div><span class="text-violet-400 font-bold">MAC </span>${e.mac_address}</div>
+                            <div class="truncate" title="${e.user_agent}"><span class="text-emerald-400 font-bold">UA  </span>${e.user_agent}</div>
                         </div>
                     </div>
                 `).join('');
@@ -651,23 +680,28 @@
         document.getElementById('view-' + tabId).classList.remove('hidden');
 
         document.querySelectorAll('.nav-item').forEach(el => {
-            el.classList.remove('text-primary');
-            el.classList.add('text-slate-500');
-            const icon = el.querySelector('.nav-icon');
-            if(icon) icon.classList.remove('status-glow');
-            const bg = el.querySelector('.nav-bg');
-            if(bg) bg.classList.add('hidden');
+            el.classList.remove('nav-active');
+            el.style.color = 'var(--text-muted)';
+            const pill = el.querySelector('.nav-pill');
+            if (pill) {
+                pill.style.background = '';
+                pill.style.borderColor = 'transparent';
+                pill.style.boxShadow = '';
+            }
         });
 
-        const activeNav = document.getElementById('nav-' + tabId);
-        activeNav.classList.remove('text-slate-500');
-        activeNav.classList.add('text-primary');
-        const activeIcon = activeNav.querySelector('.nav-icon');
-        if(activeIcon) activeIcon.classList.add('status-glow');
-        const activeBg = activeNav.querySelector('.nav-bg');
-        if(activeBg) activeBg.classList.remove('hidden');
+        const active = document.getElementById('nav-' + tabId);
+        active.classList.add('nav-active');
+        active.style.color = '';
+        const pill = active.querySelector('.nav-pill');
+        if (pill) {
+            pill.style.background = 'rgba(99,102,241,0.2)';
+            pill.style.borderColor = 'rgba(99,102,241,0.4)';
+            pill.style.boxShadow = '0 0 20px rgba(99,102,241,0.2)';
+        }
     }
 
     window.onload = init;
 </script>
-</body></html>
+</body>
+</html>
